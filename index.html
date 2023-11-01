@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h1>Phần Mềm Đọc Số</h1>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-6">
+                <div class="input-group">
+                    <input id="inputNumber" type="number" class="form-control" placeholder="Nhập số từ 0 đến 1000" min="0" max="1000">
+                </div>
+                <div class="input-group mt-3">
+                    <input id="result" type="text" class="form-control" placeholder="Kết quả" disabled>
+                    <button id="readNumber" class="btn btn-primary">Đọc số</button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <button id="recover" class="btn btn-success">Phục Hồi</button>
+                <button id="clear" class="btn btn-info ml-2">Tiếp Tục</button>
+                <button class="btn btn-danger ml-2">Thoát</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        //Nút đọc số
+        document.getElementById("readNumber").addEventListener("click", function () {
+            const inputNumber = document.getElementById("inputNumber");
+            const result = document.getElementById("result");
+            const number = parseInt(inputNumber.value);
+            
+            if (isNaN(number) || number < 0 || number > 1000) {
+                result.value = "Số không hợp lệ";
+            } else {
+                // Thực hiện logic chuyển số thành chữ và gán kết quả vào ô nhập thứ 2
+                result.value = numberToWords(number);
+            }
+        });
+        function numberToWords(number) {
+        const numberWords = [
+            "", "một", "hai", "ba", "bốn", "năm",
+            "sáu", "bảy", "tám", "chín"
+        ];
+        
+        const tensWords = ["", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi"];
+
+        if (number === 0) {
+            return "không";
+        } else if (number <= 10) {
+            return numberWords[number];
+        } else if (number < 20) {
+            return "mười " + numberWords[number - 10];
+        } else if (number < 100) {
+            return tensWords[Math.floor(number / 10)] + " " + numberWords[number % 10];
+        } else if (number < 1000) {
+            const hundreds = Math.floor(number / 100);
+            const remainder = number % 100;
+            if (remainder === 0) {
+                return numberWords[hundreds] + " trăm";
+            } else {
+                return numberWords[hundreds] + " trăm " + numberToWords(remainder);
+            }
+        } else {
+            return "số quá lớn";
+        }
+    }
+
+    //Phục hồi
+    document.getElementById("recover").addEventListener("click", function () {
+    document.getElementById("inputNumber").value = ""; // Xóa giá trị của ô nhập số
+    document.getElementById("result").value = ""; // Xóa giá trị của ô kết quả
+    });
+
+    //Tiếp tục
+    document.getElementById("clear").addEventListener("click", function () {
+    document.getElementById("inputNumber").value = ""; // Xóa giá trị của ô nhập số
+    document.getElementById("result").value = ""; // Xóa giá trị của ô kết quả
+    });
+
+    
+    </script>
+</body>
+</html>
