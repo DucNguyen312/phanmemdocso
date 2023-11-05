@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Phần mềm đọc số</title>
+    <title>Document</title>
 </head>
 <body>
     <div class="container mt-3">
@@ -36,47 +36,112 @@
         </div>
     </div>
     <script>
-        //Nút đọc số
-        document.getElementById("readNumber").addEventListener("click", function () {
-            const inputNumber = document.getElementById("inputNumber");
-            const result = document.getElementById("result");
-            const number = parseInt(inputNumber.value);
-            
-            if (isNaN(number) || number < 0 || number > 1000) {
-                result.value = "Số không hợp lệ";
-            } else {
-                // Thực hiện logic chuyển số thành chữ và gán kết quả vào ô nhập thứ 2
-                result.value = numberToWords(number);
-            }
-        });
-        function numberToWords(number) {
-        const numberWords = [
-            "", "một", "hai", "ba", "bốn", "năm",
-            "sáu", "bảy", "tám", "chín"
-        ];
-        
-        const tensWords = ["", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi"];
+      const DIGITS = [
+        'không', 'một', 'hai', 'ba', 'bốn',
+        'năm', 'sáu', 'bảy', 'tám', 'chín'
+    ];
 
-        if (number === 0) {
-            return "không";
-        } else if (number <= 10) {
-            return numberWords[number];
-        } else if (number < 20) {
-            return "mười " + numberWords[number - 10];
-        } else if (number < 100) {
-            return tensWords[Math.floor(number / 10)] + " " + numberWords[number % 10];
-        } else if (number < 1000) {
-            const hundreds = Math.floor(number / 100);
-            const remainder = number % 100;
-            if (remainder === 0) {
-                return numberWords[hundreds] + " trăm";
-            } else {
-                return numberWords[hundreds] + " trăm " + numberToWords(remainder);
+    function readTwo(b, c, isHundred) {
+        const output = [];
+        if (b === 0) {
+            if (c !== 0) {
+                if (isHundred) {
+                    output.push("lẻ", DIGITS[c]);
+                } else {
+                    output.push(DIGITS[c]);
+                }
+            }
+        } else if (b === 1) {
+            output.push("mười");
+            if (c === 5) {
+                output.push("lăm");
+            } else if (c !== 0) {
+                output.push(DIGITS[c]);
             }
         } else {
-            return "số quá lớn";
+            output.push(DIGITS[b], "mươi");
+            if (c === 1) {
+                output.push("mốt");
+            } else if (c === 4) {
+                output.push("tư");
+            } else if (c === 5) {
+                if (isHundred) {
+                    output.push("lăm");
+                } else {
+                    output.push("lăm");
+                }
+            } else if (c !== 0) {
+                output.push(DIGITS[c]);
+            }
         }
+
+        return output.join(' ');
     }
+
+    function readThree(a, b, c) {
+        const output = [];
+
+        if (a !== 0) {
+            if (a === 1) {
+                output.push("một trăm");
+            } else {
+                output.push(DIGITS[a], 'trăm');
+            }
+        }
+
+        if (b !== 0 || c !== 0) {
+            if (b === 0 && c >= 1 && c <= 9) {
+                output.push("lẻ", readTwo(b, c, true));
+            } else {
+                output.push(readTwo(b, c, false));
+            }
+        }
+
+        return output.join(' ');
+    }
+
+    function simplifyText(text) {
+        return text.replace(/(lẻ\s*)+/g, "lẻ ");
+    }
+
+    function NumberToTextVietnamese(number) {
+        if (number < 0 || number > 1000) {
+            return "Số không hợp lệ";
+        }
+
+        if(number == 1000)
+        return "một nghìn"
+
+        if (number === 0) {
+            return DIGITS[0];
+        }
+
+        const a = Math.floor(number / 100);
+        const bc = number % 100;
+        const b = Math.floor(bc / 10);
+        const c = bc % 10;
+
+        const result = [];
+
+        if (a !== 0) {
+            result.push(readThree(a, b, c));
+        } else {
+            result.push(readTwo(b, c, false));
+        }
+
+        const text = result.join(' ');
+        return simplifyText(text);
+    }   
+    //Nút đọc số
+    document.getElementById("readNumber").addEventListener("click", function () {
+        // Lấy giá trị nhập vào từ ô input
+        const inputNumber = parseInt(document.getElementById("inputNumber").value);
+
+        // Gọi hàm NumberToTextVietnamese để chuyển đổi số thành chữ và gán kết quả vào ô "Kết quả"
+        document.getElementById("result").value = NumberToTextVietnamese(inputNumber);
+    });
+
+     
 
     //Phục hồi
     document.getElementById("recover").addEventListener("click", function () {
