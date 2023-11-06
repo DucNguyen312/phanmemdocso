@@ -132,17 +132,26 @@
         const text = result.join(' ');
         return simplifyText(text);
     }   
-    //Nút đọc số
+        
+    // Nút đọc số
     document.getElementById("readNumber").addEventListener("click", function () {
         // Lấy giá trị nhập vào từ ô input
-        const inputNumber = parseInt(document.getElementById("inputNumber").value);
-
-        // Gọi hàm NumberToTextVietnamese để chuyển đổi số thành chữ và gán kết quả vào ô "Kết quả"
-        document.getElementById("result").value = NumberToTextVietnamese(inputNumber);
+        const inputNumber = document.getElementById("inputNumber").value;
+    
+        // Kiểm tra xem giá trị nhập vào có phải là một số hay không
+        if (isNaN(inputNumber)) {
+            // Nếu không phải là số, hiển thị thông báo "Không hợp lệ" và không tiến hành chuyển đổi
+            document.getElementById("result").value = "Không hợp lệ";
+        } else {
+            // Nếu là số, thực hiện chuyển đổi số thành chữ và gán kết quả vào ô "Kết quả"
+            const numericValue = parseInt(inputNumber);
+            if (numericValue >= 0 && numericValue <= 1000) {
+                document.getElementById("result").value = NumberToTextVietnamese(numericValue);
+            } else {
+                document.getElementById("result").value = "Số không hợp lệ";
+            }
+        }
     });
-
-     
-
     //Phục hồi
     document.getElementById("recover").addEventListener("click", function () {
     document.getElementById("inputNumber").value = ""; // Xóa giá trị của ô nhập số
