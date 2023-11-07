@@ -139,7 +139,7 @@
         const inputNumber = document.getElementById("inputNumber").value;
     
         // Kiểm tra xem giá trị nhập vào có phải là một số hay không
-        if (isNaN(inputNumber) && !isFinite(parseFloat(inputNumber))) {
+        if (isNaN(inputNumber) || inputNumber.includes('.') || inputNumber.includes(',')) {
             // Nếu không phải là số, hiển thị thông báo "Không hợp lệ" và không tiến hành chuyển đổi
             document.getElementById("result").value = "Không hợp lệ";
         } else {
