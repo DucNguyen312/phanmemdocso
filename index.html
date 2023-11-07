@@ -141,7 +141,7 @@
         // Kiểm tra xem giá trị nhập vào có phải là một số hay không
         if (isNaN(inputNumber) || inputNumber.includes('.') || inputNumber.includes(',')) {
             // Nếu không phải là số, hiển thị thông báo "Không hợp lệ" và không tiến hành chuyển đổi
-            document.getElementById("result").value = "Không hợp lệ";
+            document.getElementById("result").value = "Số không hợp lệ";
         } else {
             // Nếu là số, thực hiện chuyển đổi số thành chữ và gán kết quả vào ô "Kết quả"
             const numericValue = parseInt(inputNumber);
